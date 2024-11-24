@@ -29,16 +29,12 @@ class Server {
 
   constructor() {
     this.app = express();
-    this.config = GlobalConfig.getInstance();
-    this.logger = new LoggerService();
     this.db = DatabaseService.getInstance();
-
-    this.initialize();
-  }
-  private async initialize(): Promise<void> {
-    this.scanAndRegister();
+    this.config = GlobalConfig.getInstance();
     this.middleware();
     this.routes();
+    this.scanAndRegister();
+    this.logger = new LoggerService();
   }
   private middleware(): void {
     this.app.use(express.json());
