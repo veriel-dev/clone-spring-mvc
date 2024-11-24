@@ -18,7 +18,8 @@ export class ProductController {
 
   @Get("/:id")
   getProductById(req: any, res: any) {
-    const id = parseInt(req.params.id);
+    const id = req.params.id
+    console.log({id})
     const product = this.productService.getProductById(id);
     if (product) {
       return product;

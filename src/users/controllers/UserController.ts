@@ -19,12 +19,12 @@ export class UserController {
 
   @Get("/")
   getAllUsers() {
-    return this.userService.getAllUsers();
+    return this.userService.getUsers();
   }
 
   @Get("/:id")
   getUserById(req: Request, res: Response) {
-    const id = parseInt(req.params.id);
+    const id = req.params.id
     const user = this.userService.getUserById(id);
     if (user) {
       return user;
@@ -45,7 +45,7 @@ export class UserController {
   updateUser(req: Request, res: Response) {
     const id = parseInt(req.params.id);
     const userData = req.body;
-    const updatedUser = this.userService.updateUser(id, userData);
+    const updatedUser = this.userService.updateUser(id as unknown as string, userData);
     if (updatedUser) {
       return updatedUser;
     } else {
@@ -53,14 +53,14 @@ export class UserController {
     }
   }
 
-  @Delete("/:id")
-  deleteUser(req: Request, res: Response) {
-    const id = parseInt(req.params.id);
-    const success = this.userService.deleteUser(id);
-    if (success) {
-      res.status(204).send();
-    } else {
-      res.status(404).send("Usuario no encontrado");
-    }
-  }
+  // @Delete("/:id")
+  // deleteUser(req: Request, res: Response) {
+  //   const id = parseInt(req.params.id);
+  //   const success = this.userService.deleteUser(id);
+  //   if (success) {
+  //     res.status(204).send();
+  //   } else {
+  //     res.status(404).send("Usuario no encontrado");
+  //   }
+  // }
 }
