@@ -6,7 +6,7 @@
   "type": "commonjs",
   "scripts": {
     "start:debug": "node --inspect -r ts-node/register -r tsconfig-paths/register src/index.ts",
-    "start": "node dist/app.js",
+    "start": "ts-node src/app.ts",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "start:ts": "ts-node src/app.ts",
     "build": "tsc",
