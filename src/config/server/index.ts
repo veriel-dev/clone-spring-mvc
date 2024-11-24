@@ -45,7 +45,14 @@ class Server {
     this.app.get("/", (req,res) => {
       res.json({ message: 'Ruta inicial funcionando' });
     })
+    this.logger.info('Registering routes...');
+
     this.app.use("/api", AppRouter.getInstance());
+
+    this.app.use('*', (req, res) => {
+      this.logger.warn(`Route not found: ${req.originalUrl}`);
+      res.status(404).json({ error: 'Route not found' });
+    });
   }
   private scanAndRegister(): void {
     this.config.scanAndRegister(path.join(__dirname, "../../"));
