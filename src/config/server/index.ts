@@ -32,9 +32,9 @@ class Server {
     this.db = DatabaseService.getInstance();
     this.config = GlobalConfig.getInstance();
     this.middleware();
-    this.routes();
     this.scanAndRegister();
     this.logger = new LoggerService();
+    this.routes();
   }
   private middleware(): void {
     this.app.use(express.json());
