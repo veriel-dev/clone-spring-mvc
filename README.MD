@@ -40,6 +40,59 @@ Utilidad de desarrollo que:
 ## Objetivo del Proyecto
 Este proyecto busca implementar un sistema de decoradores similar a Spring MVC pero en el ecosistema Node.js, combinando la flexibilidad de Express con el poder del tipado estático de TypeScript y la metaprogramación mediante decoradores.
 
+
+## Estado Actual del Proyecto
+
+Actualmente se ha implementado una API REST básica con las siguientes características:
+
+### Implementaciones Realizadas
+
+- **Configuración ODM MongoDB**: Implementación básica para la conexión y manejo de datos con MongoDB.
+- **Endpoints CRUD Básicos**: Se han desarrollado operaciones CRUD para las siguientes entidades:
+  - Seeds (datos de prueba)
+  - Users (gestión de usuarios)
+  - Products (gestión de productos)
+
+## Próximas Implementaciones
+
+### Mejoras Prioritarias
+
+1. **Validación de Modelos**
+   - Implementar validación de esquemas
+   - Agregar reglas de negocio específicas
+   - Validación de tipos de datos y formatos
+
+2. **Manejo Global de Errores**
+   - Implementar middleware de errores centralizado
+   - Estandarizar respuestas de error
+   - Logging de errores
+   - Manejo de excepciones personalizado
+
+3. **Mejoras en Operaciones CRUD**
+   - Implementar paginación
+   - Agregar filtros avanzados
+   - Optimizar consultas
+   - Implementar soft delete
+   - Añadir historial de cambios
+
+### Mejoras Futuras
+
+- **Seguridad**
+  - Implementación de autenticación
+  - Sistema de roles y permisos
+  - Protección contra ataques comunes
+
+- **Documentación**
+  - Documentación detallada de API con Swagger/OpenAPI
+  - Guías de desarrollo
+  - Ejemplos de uso
+
+- **Performance**
+  - Implementación de caché
+  - Optimización de consultas
+  - Indexación avanzada
+
+
 ## Autor 
 Víctor Manuel Ordiales García
 
