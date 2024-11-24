@@ -46,6 +46,9 @@ class Server {
     this.app.use(this.loggingMiddleware.bind(this));
   }
   private routes(): void {
+    this.app.get("/", (req,res) => {
+      res.json({ message: 'Ruta inicial funcionando' });
+    })
     this.app.use("/api", AppRouter.getInstance());
   }
   private scanAndRegister(): void {
@@ -62,7 +65,7 @@ class Server {
       await this.db.connect(this.mongoUri, this.dbName);
       
       this.logger.info(
-        `Connected to MongoDB at ${this.mongoUri}/${this.dbName}`
+        `Connected to MongoDB at ${this.mongoUri}`
       );
     } catch (error) {
       this.logger.error("Failed to connect to MongoDB:", error);
