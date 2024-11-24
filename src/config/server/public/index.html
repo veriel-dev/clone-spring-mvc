@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>API Documentation - Clone-Spring-MVC</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            color: #2c3e50;
+            border-bottom: 2px solid #3498db;
+            padding-bottom: 10px;
+        }
+        h2 {
+            color: #3498db;
+            margin-top: 30px;
+        }
+        .endpoint {
+            background-color: #f8f9fa;
+            padding: 20px;
+            border-radius: 5px;
+            margin: 15px 0;
+            border-left: 4px solid #3498db;
+        }
+        .method {
+            display: inline-block;
+            padding: 5px 10px;
+            border-radius: 4px;
+            color: white;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+        .get { background-color: #27ae60; }
+        .post { background-color: #2980b9; }
+        .put { background-color: #f39c12; }
+        .delete { background-color: #c0392b; }
+        code {
+            background-color: #f1f1f1;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: monospace;
+        }
+        .description {
+            margin: 10px 0;
+            color: #555;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>API Documentation - <code>Clone-Spring-MVC</code></h1>
+        
+        <p>Esta API proporciona endpoints para gestionar usuarios, productos y datos de prueba del proyecto <code>Clone-Spring-MVC</code>. Todos los endpoints están bajo el prefijo <code>/api</code>.</p>
+
+        <h2>Users Controller</h2>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/users</code>
+            <div class="description">Obtiene todos los usuarios registrados.</div>
+        </div>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/users</code>
+            <div class="description">Crea un nuevo usuario.</div>
+        </div>
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/api/users/:id</code>
+            <div class="description">Actualiza un usuario existente.</div>
+        </div>
+        <!-- <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/api/users/:id</code>
+            <div class="description">Elimina un usuario.</div>
+        </div> -->
+
+        <h2>Products Controller</h2>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/api/products</code>
+            <div class="description">Obtiene todos los productos.</div>
+        </div>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/api/products</code>
+            <div class="description">Crea un nuevo producto.</div>
+        </div>
+        <div class="endpoint">
+            <span class="method put">PUT</span>
+            <code>/api/products/:id</code>
+            <div class="description">Actualiza un producto existente.</div>
+        </div>
+        <!-- <div class="endpoint">
+            <span class="method delete">DELETE</span>
+            <code>/api/products/:id</code>
+            <div class="description">Elimina un producto.</div>
+        </div> -->
+
+        <h2>Seed Controller</h2>
+        <div class="endpoint">
+            <span class="method post">POST</span>
+            <code>/seed/run</code>
+            <div class="description">Generación de semilla de datos</div>
+        </div>
+        <div class="endpoint">
+            <span class="method get">GET</span>
+            <code>/seed/status</code>
+            <div class="description">Estado de los datos semilla</div>
+        </div>
+    </div>
+</body>
+</html>

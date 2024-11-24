@@ -40,18 +40,19 @@ class Server {
     this.app.use(express.json());
     this.app.use(express.urlencoded({ extended: true }));
     this.app.use(this.loggingMiddleware.bind(this));
+    this.app.use(express.static(path.join(__dirname, 'public')));
   }
   private routes(): void {
-    this.app.get("/", (req,res) => {
-      res.json({ message: 'Ruta inicial funcionando' });
-    })
-    this.logger.info('Registering routes...');
+    this.app.get("/", (req, res) => {
+      res.sendFile(path.join(__dirname, 'public', 'index.html'));
+    });
+    
 
     this.app.use("/api", AppRouter.getInstance());
 
     this.app.use('*', (req, res) => {
       this.logger.warn(`Route not found: ${req.originalUrl}`);
-      res.status(404).json({ error: 'Route not found' });
+      res.sendFile(path.join(__dirname, 'public', '404.html'));
     });
   }
   private scanAndRegister(): void {
