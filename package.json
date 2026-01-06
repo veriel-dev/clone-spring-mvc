@@ -6,10 +6,11 @@
   "type": "commonjs",
   "scripts": {
     "start:debug": "node --inspect -r ts-node/register -r tsconfig-paths/register src/index.ts",
-    "start": "ts-node src/app.ts",
+    "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "start:ts": "ts-node src/app.ts",
     "build": "tsc",
+    "build:prod": "npm run build && npm prune --production",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
     "test": "jest",
