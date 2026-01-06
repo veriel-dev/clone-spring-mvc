@@ -9,7 +9,7 @@
     "start": "node dist/app.js",
     "dev": "ts-node-dev --respawn --transpile-only src/app.ts",
     "start:ts": "ts-node src/app.ts",
-    "build": "tsc",
+    "build": "tsc && cp -r src/config/server/public dist/config/server/",
     "build:prod": "npm run build && npm prune --production",
     "lint": "eslint . --ext .ts",
     "lint:fix": "eslint . --ext .ts --fix",
