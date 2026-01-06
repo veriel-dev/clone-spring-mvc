@@ -30,7 +30,7 @@ export class LoggerService {
             default:
               coloredLevel = upperCaseLevel;
           }
-          const formattedDate = this.formatDate(new Date(timestamp));
+          const formattedDate = this.formatDate(new Date(timestamp as string));
           return `${colors.cyan(formattedDate)} [${coloredLevel}]: ${message}`;
         })
       ),

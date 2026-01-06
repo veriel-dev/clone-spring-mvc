@@ -1,7 +1,7 @@
 import { LoggerService } from "../../config/logs/LoggerService";
 import { Service } from "../../config/decorators";
 import { DatabaseService } from "../../odm/database.service";
-import { hash, compare } from "bcrypt";
+import { hash, compare } from "bcryptjs";
 import { User } from "../../config/models/user.model";
 import { ObjectId } from "mongodb";
 

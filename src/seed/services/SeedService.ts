@@ -3,7 +3,7 @@ import { Service } from "../../config/decorators";
 import { DatabaseService } from "../../odm/database.service";
 import { User } from "../../config/models/user.model";
 import { Product } from "../../config/models/product.model";
-import { hash, hashSync } from "bcrypt";
+import { hash, hashSync } from "bcryptjs";
 
 @Service()
 export class SeedService {
