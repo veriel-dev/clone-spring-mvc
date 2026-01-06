@@ -31,7 +31,7 @@ export class GlobalConfig {
       const stat = fs.statSync(filePath);
       if (stat.isDirectory()) {
         this.scanDirectory(filePath);
-      } else if (file.endsWith(".ts")) {
+      } else if (file.endsWith(".ts") || file.endsWith(".js")) {
         this.processFile(filePath);
       }
     }
