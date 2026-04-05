@@ -34,6 +34,7 @@ export type { DocumentType } from "./odm/type";
 
 // Server & Routing
 export { default as Server } from "./config/server";
+export type { ServerOptions } from "./config/server";
 export { AppRouter } from "./config/routes/AppRoute";
 export { GlobalConfig } from "./config/GlobalConfig";
 
