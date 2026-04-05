@@ -24,14 +24,27 @@ export class GlobalConfig {
     this.registerServices();
     this.registerControllers();
   }
+  private static readonly EXCLUDED_DIRS = new Set([
+    "node_modules", "__tests__", "dist", ".git",
+  ]);
+
   private scanDirectory(dir: string): void {
     const files = fs.readdirSync(dir);
     for (const file of files) {
       const filePath = path.join(dir, file);
       const stat = fs.statSync(filePath);
       if (stat.isDirectory()) {
-        this.scanDirectory(filePath);
-      } else if (file.endsWith(".ts") || file.endsWith(".js")) {
+        if (!GlobalConfig.EXCLUDED_DIRS.has(file)) {
+          this.scanDirectory(filePath);
+        }
+      } else if (
+        (file.endsWith(".ts") || file.endsWith(".js")) &&
+        !file.endsWith(".spec.ts") &&
+        !file.endsWith(".test.ts") &&
+        !file.endsWith(".spec.js") &&
+        !file.endsWith(".test.js") &&
+        !file.endsWith(".d.ts")
+      ) {
         this.processFile(filePath);
       }
     }
