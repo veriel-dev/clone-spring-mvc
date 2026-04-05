@@ -221,7 +221,6 @@ pnpm test
 ## Roadmap
 
 - [ ] Publicar como paquete npm
-- [ ] Separar core de la libreria de los modulos ejemplo
 - [ ] Documentacion OpenAPI/Swagger
 - [ ] Soporte para middleware custom por ruta
 - [ ] Transacciones MongoDB
