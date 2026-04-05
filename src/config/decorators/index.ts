@@ -5,3 +5,5 @@ export * from "./Inject";
 export * from "./Param";
 export * from "./Validation";
 export * from "./DecoradorDTO";
+export * from "./Value";
+export * from "./Model";

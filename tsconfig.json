@@ -12,6 +12,8 @@
     "strict": true,
     "strictPropertyInitialization": false,
     "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
     "baseUrl": ".",
     "paths": {
       "*": ["node_modules/*"],

@@ -50,7 +50,7 @@ export class SeedService {
             }),
             new User({
                 name: 'Jane Smith',
-                email: "Veriel1234!",
+                email: 'jane@example.com',
                 password: hashSync("Veriel1234!", 10)
             }),
             new User({

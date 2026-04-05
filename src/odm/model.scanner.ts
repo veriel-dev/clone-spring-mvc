@@ -24,14 +24,13 @@ export class ModelScanner {
                         try {
                             new modelClass();
                             ModelsRegistry.register(modelClass);
-                            console.log(`Registered model from ${path.basename(file)}`);
-                        } catch (error) {
-                            console.error(`Invalid model constructor in ${file}:`, error);
+                        } catch {
+                            // Skip invalid model constructors
                         }
                     }
                 });
-            } catch (error) {
-                console.error(`Error loading model from ${file}:`, error);
+            } catch {
+                // Skip files that fail to load
             }
         }
     }
