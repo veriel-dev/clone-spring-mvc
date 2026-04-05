@@ -1,7 +1,6 @@
 import { Collection, Db, ObjectId } from 'mongodb';
 import { DocumentType } from './type';
 import { BaseDocument } from './base-document';
-import { throws } from 'assert';
 
 export class DocumentManager<T extends BaseDocument> {
     public collection: Collection
@@ -32,6 +31,10 @@ export class DocumentManager<T extends BaseDocument> {
             { $set: document },
             { returnDocument: 'after' }
         );
-        return result!!.value ? new this.documentClass(result!!.value) : null;
+        return result ? new this.documentClass(result as Partial<DocumentType>) : null;
+    }
+    async delete(id: string): Promise<boolean> {
+        const result = await this.collection.deleteOne({ _id: new ObjectId(id) });
+        return result.deletedCount === 1;
     }
 }

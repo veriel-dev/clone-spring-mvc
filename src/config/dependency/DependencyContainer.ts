@@ -16,10 +16,17 @@ class DependencyContainer {
   }
 
   resolve<T>(target: new (...args: any[]) => T): T {
+    const name = target.name;
+    if (this.dependencies.has(name)) {
+      return this.dependencies.get(name) as T;
+    }
+
     const tokens = Reflect.getMetadata("design:paramtypes", target) || [];
     const injections = tokens.map((token: any) => this.resolve(token));
 
-    return new target(...injections);
+    const instance = new target(...injections);
+    this.dependencies.set(name, instance);
+    return instance;
   }
 }
 

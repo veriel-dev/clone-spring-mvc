@@ -71,8 +71,7 @@ export class ProductService {
     ]);
 
     return {
-      //@ts-ignore
-      products,
+      products: products as unknown as Product[],
       total,
       page,
       totalPages: Math.ceil(total / limit),
@@ -121,5 +120,43 @@ export class ProductService {
     this.logger.info(`Product created successfully: ${createdProduct._id}`);
 
     return createdProduct;
+  }
+
+  async updateProduct(id: string, updateData: Partial<Product>): Promise<Product> {
+    const productManager = this.db.getManager(Product);
+
+    if (updateData.price !== undefined && updateData.price < 0) {
+      const error = new Error("Price must be greater than or equal to 0");
+      error.name = "ValidationError";
+      throw error;
+    }
+
+    const updatedProduct = await productManager.update(id, {
+      ...updateData,
+      updatedAt: new Date(),
+    } as Partial<Product>);
+
+    if (!updatedProduct) {
+      const error = new Error("Product not found");
+      error.name = "NotFoundError";
+      throw error;
+    }
+
+    this.logger.info(`Product updated successfully: ${id}`);
+    return updatedProduct;
+  }
+
+  async deleteProduct(id: string): Promise<boolean> {
+    const productManager = this.db.getManager(Product);
+    const deleted = await productManager.delete(id);
+
+    if (!deleted) {
+      const error = new Error("Product not found");
+      error.name = "NotFoundError";
+      throw error;
+    }
+
+    this.logger.info(`Product deleted successfully: ${id}`);
+    return true;
   }
 }

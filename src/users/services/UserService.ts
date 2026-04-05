@@ -54,7 +54,6 @@ export class UserService {
   }
   /* Get user By  Id*/
   async getUserById(id: string): Promise<User> {
-    console.log({id})
     const userManager = this.db.getManager(User);
     const user = await userManager.findById(id);
 
@@ -150,5 +149,19 @@ export class UserService {
     // Excluir la contraseña
     const { password, ...userWithoutPassword } = updatedUser;
     return userWithoutPassword as User;
+  }
+
+  async deleteUser(id: string): Promise<boolean> {
+    const userManager = this.db.getManager(User);
+    const deleted = await userManager.delete(id);
+
+    if (!deleted) {
+      const error = new Error("User not found");
+      error.name = "NotFoundError";
+      throw error;
+    }
+
+    this.logger.info(`User deleted successfully: ${id}`);
+    return true;
   }
 }

@@ -1,100 +1,237 @@
 # Clone Spring MVC
 
-Proyecto backend basado en arquitectura MVC (Modelo-Vista-Controlador) implementado con Node.js y TypeScript.
+Framework backend para Node.js inspirado en Spring MVC. Proporciona un sistema de decoradores, inyeccion de dependencias, ODM para MongoDB y validacion de DTOs usando TypeScript y Express.
 
+> **Objetivo**: convertirse en una libreria npm reutilizable para construir APIs REST con arquitectura MVC basada en decoradores.
 
-Proyecto que implementa un sistema de decoradores similar a Spring MVC utilizando TypeScript y Express.
-Tecnologías Utilizadas
+## Caracteristicas
 
-## Express
-Framework minimalista y flexible para Node.js que permite crear APIs REST de forma rápida y sencilla. Se eligió por:
+- **Decoradores de routing**: `@Controller`, `@Get`, `@Post`, `@Put`, `@Delete`
+- **Inyeccion de dependencias**: `@Service`, `@Inject` con contenedor IoC
+- **ODM para MongoDB**: `@Model` con DocumentManager generico (CRUD completo)
+- **Validacion de DTOs**: `@IsRequired`, `@IsEmail`, `@MinLength`, `@MaxLength`, `@IsNumber`
+- **Inyeccion de variables de entorno**: `@Value("KEY", default)`
+- **Auto-discovery**: escaneo automatico de controllers y services
+- **Logging estructurado**: Winston con salida coloreada y archivos
+- **Error handling centralizado**: mapeo automatico de errores a codigos HTTP
 
-- Su simplicidad y rendimiento
-- Gran comunidad y documentación
-- Fácil integración con middleware
-- Flexibilidad para crear rutas y endpoints
+## Stack Tecnologico
 
-## TypeScript
-Superconjunto de JavaScript que añade tipado estático. Se utiliza para:
+| Categoria | Tecnologia |
+|-----------|-----------|
+| Runtime | Node.js + TypeScript 5.x |
+| HTTP | Express 4.x |
+| Base de datos | MongoDB 6.x (driver nativo + ODM custom) |
+| Metaprogramacion | reflect-metadata |
+| Seguridad | bcryptjs |
+| Logging | Winston |
+| Testing | Jest + ts-jest + supertest |
+| Linting | ESLint + @typescript-eslint |
 
-- Proporcionar mejor autocompletado y detección de errores
-- Mejorar el mantenimiento del código
-- Facilitar el desarrollo de decoradores
-- Hacer el código más robusto y predecible
+## Inicio Rapido
 
-## reflect-metadata
-Biblioteca que permite añadir y leer metadatos de clases y métodos. Fundamental para:
+### Requisitos previos
 
-- Implementar decoradores similares a Spring
-- Inyección de dependencias
-- Lectura de metadatos en tiempo de ejecución
-- Crear una estructura similar a frameworks como Spring MVC
+- Node.js >= 18
+- pnpm
+- MongoDB (local o Atlas)
 
-## ts-node-dev
-Utilidad de desarrollo que:
+### Instalacion
 
-- Reinicia automáticamente la aplicación cuando hay cambios
-- Compila TypeScript al vuelo
-- Mejora la experiencia de desarrollo
+```bash
+pnpm install
+```
 
-## Objetivo del Proyecto
-Este proyecto busca implementar un sistema de decoradores similar a Spring MVC pero en el ecosistema Node.js, combinando la flexibilidad de Express con el poder del tipado estático de TypeScript y la metaprogramación mediante decoradores.
+### Configuracion
 
+Crear un archivo `.env` en la raiz del proyecto:
 
-## Estado Actual del Proyecto
+```env
+PORT=3000
+MAX_PORT_ATTEMPTS=10
+MONGODB_URI=mongodb://localhost:27017
+MONGODB_DB_NAME=spring-mvc-clone
+```
 
-Actualmente se ha implementado una API REST básica con las siguientes características:
+### Desarrollo
 
-### Implementaciones Realizadas
+```bash
+pnpm dev
+```
 
-- **Configuración ODM MongoDB**: Implementación básica para la conexión y manejo de datos con MongoDB.
-- **Endpoints CRUD Básicos**: Se han desarrollado operaciones CRUD para las siguientes entidades:
-  - Seeds (datos de prueba)
-  - Users (gestión de usuarios)
-  - Products (gestión de productos)
+### Build y produccion
 
-## Próximas Implementaciones
+```bash
+pnpm build
+pnpm start
+```
 
-### Mejoras Prioritarias
+## Uso
 
-1. **Validación de Modelos**
-   - Implementar validación de esquemas
-   - Agregar reglas de negocio específicas
-   - Validación de tipos de datos y formatos
+### Crear un servicio
 
-2. **Manejo Global de Errores**
-   - Implementar middleware de errores centralizado
-   - Estandarizar respuestas de error
-   - Logging de errores
-   - Manejo de excepciones personalizado
+```typescript
+import { Service } from "./config/decorators";
 
-3. **Mejoras en Operaciones CRUD**
-   - Implementar paginación
-   - Agregar filtros avanzados
-   - Optimizar consultas
-   - Implementar soft delete
-   - Añadir historial de cambios
+@Service()
+export class ProductService {
+  async getAll() {
+    // logica de negocio
+  }
+}
+```
 
-### Mejoras Futuras
+### Crear un controller
 
-- **Seguridad**
-  - Implementación de autenticación
-  - Sistema de roles y permisos
-  - Protección contra ataques comunes
+```typescript
+import { Controller, Get, Post, Inject } from "./config/decorators";
+import { ProductService } from "../services/ProductService";
+import { Request, Response } from "express";
 
-- **Documentación**
-  - Documentación detallada de API con Swagger/OpenAPI
-  - Guías de desarrollo
-  - Ejemplos de uso
+@Controller("/products")
+export class ProductController {
+  constructor(@Inject() private productService: ProductService) {}
 
-- **Performance**
-  - Implementación de caché
-  - Optimización de consultas
-  - Indexación avanzada
+  @Get("/")
+  async getAll() {
+    return await this.productService.getAll();
+  }
 
+  @Post("/")
+  async create(req: Request, res: Response) {
+    const product = await this.productService.create(req.body);
+    res.status(201).json(product);
+  }
+}
+```
 
-## Autor 
-Víctor Manuel Ordiales García
+### Definir un modelo
+
+```typescript
+import { Model } from "./config/decorators/Model";
+import { BaseDocument } from "./odm/base-document";
+
+@Model("products")
+export class Product extends BaseDocument {
+  name: string;
+  price: number;
+  stock: number;
+
+  constructor(data?: Partial<Product>) {
+    super(data);
+    this.name = data?.name ?? "";
+    this.price = data?.price ?? 0;
+    this.stock = data?.stock ?? 0;
+  }
+}
+```
+
+### Validacion con DTOs
+
+```typescript
+import { IsRequired, MinLength, IsEmail } from "./config/decorators";
+
+export class UserDTO {
+  @IsRequired()
+  @MinLength(3)
+  name: string;
+
+  @IsRequired()
+  @IsEmail()
+  email: string;
+}
+```
+
+Aplicar en un controller con `@DTO(UserDTO)`:
+
+```typescript
+@Post("/")
+@DTO(UserDTO)
+async createUser(req: Request, res: Response) {
+  // req.body ya esta validado
+}
+```
+
+## Arquitectura
+
+```
+src/
+├── config/
+│   ├── decorators/        # @Controller, @Service, @Get, @Post, @Inject, @Value, @DTO, validaciones
+│   ├── dependency/        # Contenedor IoC (DependencyContainer)
+│   ├── routes/            # Router singleton de Express
+│   ├── logs/              # Logger con Winston
+│   ├── models/            # Definiciones de modelos MongoDB
+│   ├── server/            # Clase Server (Express + middleware + boot)
+│   └── GlobalConfig.ts    # Auto-discovery y registro de controllers/services
+├── odm/                   # Object Document Mapper custom para MongoDB
+│   ├── base-document.ts   # Clase base abstracta
+│   ├── document-manager.ts # CRUD generico (create, find, update, delete)
+│   ├── database.service.ts # Conexion y registry de managers
+│   └── models.registry.ts  # Registro de modelos @Model
+├── users/                 # Modulo ejemplo: Users
+├── products/              # Modulo ejemplo: Products
+├── seed/                  # Modulo ejemplo: Seed de BD
+├── utils/                 # Middleware validateDTO
+└── app.ts                 # Entry point
+```
+
+## API Endpoints
+
+| Metodo | Ruta | Descripcion |
+|--------|------|-------------|
+| POST | /api/seed/run | Poblar BD con datos de prueba |
+| GET | /api/seed/status | Estado del seed |
+| GET | /api/users | Listar usuarios (paginado) |
+| GET | /api/users/:id | Obtener usuario por ID |
+| POST | /api/users | Crear usuario |
+| PUT | /api/users/:id | Actualizar usuario |
+| DELETE | /api/users/:id | Eliminar usuario |
+| GET | /api/products | Listar productos (paginado, filtros) |
+| GET | /api/products/:id | Obtener producto por ID |
+| POST | /api/products | Crear producto |
+| PUT | /api/products/:id | Actualizar producto |
+| DELETE | /api/products/:id | Eliminar producto |
+
+## Scripts
+
+```bash
+pnpm dev              # Desarrollo con hot-reload
+pnpm build            # Compilar TypeScript
+pnpm start            # Ejecutar version compilada
+pnpm test             # Ejecutar tests
+pnpm test:watch       # Tests en modo watch
+pnpm test:coverage    # Tests con cobertura
+pnpm lint             # Ejecutar ESLint
+pnpm lint:fix         # ESLint con auto-fix
+```
+
+## Tests
+
+El proyecto incluye tests unitarios para los componentes core del framework:
+
+- **Decoradores**: `@Controller`, `@Service`, `@Get/@Post/@Put/@Delete`, `@Inject`, `@DTO`, `@Value`, validaciones
+- **DependencyContainer**: registro, resolucion, cache, DI recursiva
+- **validateDTO middleware**: validacion de request body
+
+```bash
+pnpm test
+```
+
+## Roadmap
+
+- [ ] Publicar como paquete npm
+- [ ] Separar core de la libreria de los modulos ejemplo
+- [ ] Documentacion OpenAPI/Swagger
+- [ ] Soporte para middleware custom por ruta
+- [ ] Transacciones MongoDB
+- [ ] CI/CD con GitHub Actions
+- [ ] Docker
+
+## Autor
+
+Victor Manuel Ordiales Garcia
 
 ## Licencia
+
 MIT

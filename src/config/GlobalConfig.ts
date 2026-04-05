@@ -76,11 +76,28 @@ export class GlobalConfig {
         const handlers = [
           validateDTO(dtoClass),
           (req: Request, res: Response) => {
-            const result = (instance as any)[route.handlerName](req, res);
-            if (result instanceof Promise) {
-              result.then((result) => res.send(result));
-            } else {
-              res.send(result);
+            try {
+              const result = (instance as any)[route.handlerName](req, res);
+              if (result instanceof Promise) {
+                result.then((data) => {
+                  if (!res.headersSent && data !== undefined) {
+                    res.send(data);
+                  }
+                }).catch((error) => {
+                  if (!res.headersSent) {
+                    const status = error.name === "NotFoundError" ? 404
+                      : error.name === "ValidationError" ? 400
+                      : 500;
+                    res.status(status).json({ error: error.message });
+                  }
+                });
+              } else if (!res.headersSent && result !== undefined) {
+                res.send(result);
+              }
+            } catch (error: any) {
+              if (!res.headersSent) {
+                res.status(500).json({ error: error.message });
+              }
             }
           },
         ];

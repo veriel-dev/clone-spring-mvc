@@ -21,7 +21,6 @@ export class SeedController {
             await this.seedService.seedDatabase();
             res.status(200).json({ message: 'Database seeded successfully' });
         } catch (error) {
-            console.log(error)
             res.status(500).json({ 
                 error: 'Failed to seed database',
                 details: error instanceof Error ? error.message : 'Unknown error'

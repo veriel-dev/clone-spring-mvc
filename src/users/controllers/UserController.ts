@@ -18,49 +18,47 @@ export class UserController {
   constructor(@Inject() private userService: UserService) {}
 
   @Get("/")
-  getAllUsers() {
-    return this.userService.getUsers();
+  async getAllUsers() {
+    return await this.userService.getUsers();
   }
 
   @Get("/:id")
-  getUserById(req: Request, res: Response) {
-    const id = req.params.id
-    const user = this.userService.getUserById(id);
+  async getUserById(req: Request, res: Response) {
+    const id = req.params.id;
+    const user = await this.userService.getUserById(id);
     if (user) {
       return user;
     } else {
-      res.status(404).send("Usuario no encontrado");
+      res.status(404).json({ error: "Usuario no encontrado" });
     }
   }
 
   @Post("/")
   @DTO(UserDTO)
-  createUser(req: Request, res: Response) {
-    const newUser = req.body;
-    const createdUser = this.userService.createUser(newUser);
+  async createUser(req: Request, res: Response) {
+    const createdUser = await this.userService.createUser(req.body);
     res.status(201).json(createdUser);
   }
 
   @Put("/:id")
-  updateUser(req: Request, res: Response) {
-    const id = parseInt(req.params.id);
-    const userData = req.body;
-    const updatedUser = this.userService.updateUser(id as unknown as string, userData);
+  async updateUser(req: Request, res: Response) {
+    const id = req.params.id;
+    const updatedUser = await this.userService.updateUser(id, req.body);
     if (updatedUser) {
       return updatedUser;
     } else {
-      res.status(404).send("Usuario no encontrado");
+      res.status(404).json({ error: "Usuario no encontrado" });
     }
   }
 
-  // @Delete("/:id")
-  // deleteUser(req: Request, res: Response) {
-  //   const id = parseInt(req.params.id);
-  //   const success = this.userService.deleteUser(id);
-  //   if (success) {
-  //     res.status(204).send();
-  //   } else {
-  //     res.status(404).send("Usuario no encontrado");
-  //   }
-  // }
+  @Delete("/:id")
+  async deleteUser(req: Request, res: Response) {
+    const id = req.params.id;
+    const deleted = await this.userService.deleteUser(id);
+    if (deleted) {
+      res.status(204).send();
+    } else {
+      res.status(404).json({ error: "Usuario no encontrado" });
+    }
+  }
 }
